@@ -9,33 +9,69 @@
 import Foundation
 import UIKit
 
-protocol ViewToPresenterProtocol: class{
+
+protocol InfoViewProtocol {
+  
+  var viewRef: InfoController? {get set}
+  var infoWireframe: InfoWireframe? {get set}
+  var infoInteractor: InfoInteractor? {get set}
+  //View -> Presenter
+  func viewDidLoad()  
+}
+
+protocol InfoPresenterProtocol {
+  //Presenter -> View
+    func updateTheRecentInfoList(recentSavedInfo: [String:String]?, error: Error?)
+}
+
+protocol InfoInteractorInputProtocol {
     
-    var view: PresenterToViewProtocol? {get set}
-    var interactor: PresenterToInteractorProtocol? {get set}
-    var router: PresenterToRouterProtocol? {get set}
+  var presenter: InfoPresenter? {get set}
+  //Presenter -> Interactor
+  func fetchGetInfo()
+  func fetchGetApi()
+  func getRoute()
     
-    func startFetchingInfo()
-    func showMovieController(navigationController:UINavigationController)
-
 }
 
-protocol PresenterToViewProtocol: class{
-    func showInfo(infoArray:Array<InfoModel>)
-    func showError()
+protocol InfoInteractorOutputProtocol {
+  //Interactor -> Protocol
+  func didFinishFetchingInfoResults(allSearches: [String]?,error: Error?)
+    func routeDetailFetched(route: [String]?,errorMessage: String?)
 }
 
-protocol PresenterToRouterProtocol: class {
-    static func createModule()-> InfoViewController
-    func pushToNextScreen(navigationConroller:UINavigationController)
+protocol InfoWireframeProtocol {
+  //Presenter -> Wireframe
+  func showDetail(from controller: InfoController, withRoute route: [String])
 }
 
-protocol PresenterToInteractorProtocol: class {
-    var presenter:InteractorToPresenterProtocol? {get set}
-    func fetchInfo()
-}
-
-protocol InteractorToPresenterProtocol: class {
-    func infoFetchedSuccess(infoModelArray:Array<InfoModel>)
-    func infoFetchFailed()
-}
+//protocol ViewToPresenterProtocol: class {
+//
+//    var view: PresenterToViewProtocol? {get set}
+//    var interactor: PresenterToInteractorProtocol? {get set}
+//    var router: PresenterToRouterProtocol? {get set}
+//    
+//    func startFetchingInfo()
+//    func showMovieController(navigationController:UINavigationController)
+//
+//}
+//
+//protocol PresenterToViewProtocol: class{
+//    func showInfo(infoArray:Array<InfoModel>)
+//    func showError()
+//}
+//
+//protocol PresenterToRouterProtocol: class {
+//    static func createModule()-> InfoViewController
+//    func pushToNextScreen(navigationConroller:UINavigationController)
+//}
+//
+//protocol PresenterToInteractorProtocol: class {
+//    var presenter:InteractorToPresenterProtocol? {get set}
+//    func fetchInfo()
+//}
+//
+//protocol InteractorToPresenterProtocol: class {
+//    func infoFetchedSuccess(infoModelArray:Array<InfoModel>)
+//    func infoFetchFailed()
+//}
